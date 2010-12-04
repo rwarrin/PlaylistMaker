@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <iostream>
 #include <fstream>
 
 // Filepath is a cString containing the directory path
@@ -37,7 +36,7 @@ int main(int argc, char *argv[]) {
 		ext = ".mp3";  // Assuming .mp3 since no filetype was specified
 	}
 	else {
-		std::cout << "\nUsage: pm.exe <directory to music> <file extension>";
+		printf("Uage: pm.exe <directory to music> <file extension>\n");
 		return 1;
 	}
 
@@ -55,19 +54,19 @@ int main(int argc, char *argv[]) {
 		playlist.open(saveto);
 
 		if(playlist.fail()) {
-			std::cout << "failed to open '" << saveto << "' for writing\n";
+			printf("Failed to open '%s' for writing", saveto);
 			return 1;
 		}
 		else {
 			while( value != 0) {
-				std::cout << fd.cFileName << std::endl;
+				printf("%s", fd.cFileName);
 				playlist << fd.cFileName << std::endl;
 				value = FindNextFile(handle, &fd);
 			}
 		}
 	}
 	else {
-		std::cout << "Failed to find the file type '" << ext << "'\n";
+		printf("Failed to find the file type '%s'", ext);
 		return 0;
 	}
 
