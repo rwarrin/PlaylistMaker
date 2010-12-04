@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 		strcpy(ext, ".mp3");  // Assuming .mp3 since no filetype was specified
 	}
 	else {
-		std::cout << "\nUsage: PlaylistMaker.exe <directory to music> <file extension>";
+		std::cout << "\nUsage: pm.exe <directory to music> <file extension>";
 		return 1;
 	}
 
