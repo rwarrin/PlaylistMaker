@@ -2,28 +2,19 @@
 #include <iostream>
 #include <fstream>
 
-namespace { 
-	WIN32_FIND_DATA fd;
-	FINDEX_INFO_LEVELS fInfoLevelId;
-	FINDEX_SEARCH_OPS fSearchOp;
-	HANDLE handle = NULL;
-	char filepath[256];
-	char ext[256];
-	char *type;
-}  // Anonymous namespace
-
-// input: extension is a pointer to a cstring that is the type of
-// file to make a playlit of.
+// Filepath is a cString containing the directory path
+// Extension is a cString containing the file type to search for.
+// Handle is a reference to a handle which points to the file
+// FD is a reference to a struct to store information about the file
 // return: returns true of a file of the specified file type is found
 // within the directory.
-bool TestFileType(char * extension) {
+bool FindFileType(char *filepath, char * extension, HANDLE &handle, WIN32_FIND_DATA &fd) {
 	char file[256];
 	strcpy(file, filepath);
 	strcat(file, "\\*");
 	strcat(file, extension);
 
 	handle = FindFirstFile(file, &fd);
-
 	if(handle != INVALID_HANDLE_VALUE)
 		return true;
 	
@@ -31,11 +22,19 @@ bool TestFileType(char * extension) {
 }
 
 int main(int argc, char *argv[]) {
+	WIN32_FIND_DATA fd;
+	FINDEX_INFO_LEVELS fInfoLevelId;
+	FINDEX_SEARCH_OPS fSearchOp;
+	HANDLE handle = NULL;
+	char *filepath;
+	char *ext;
+	char *type;
+
 	if(argc == 3) {
-		strcpy(ext, argv[2]);
+		ext = argv[2];
 	}
 	else if(argc == 2) {
-		strcpy(ext, ".mp3");  // Assuming .mp3 since no filetype was specified
+		ext = ".mp3";  // Assuming .mp3 since no filetype was specified
 	}
 	else {
 		std::cout << "\nUsage: pm.exe <directory to music> <file extension>";
@@ -43,9 +42,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
-	strcpy(filepath, argv[1]);
+	filepath = argv[1];
 
-	if(TestFileType(ext)) {
+	if(FindFileType(filepath, ext, handle, fd)) {
 		int value = 1;
 		char saveto[256];
 		std::ofstream playlist;
